@@ -50,7 +50,7 @@ var exc []Exc
 const telegramBotApi = "telegram_bot_api_token"
 const telegramChannel = "@telegram_public_channel_name"
 const minVolume = 30000
-const pair = "USDT"
+var pairs = []string{"USDT","USDC"}
 const ratio = 1.1
 
 var enabledMarkets = []string{"huobi", "binance", "ftx", "mxc", "gate", "okex", "kucoin", "hotbit", "bittrex", "bithumb global", "cointiger", "bkex", "bitforex", "bitmax", "gemini", "bitfinex", "poloniex", "coinxpro", "bilaxy"}
@@ -140,7 +140,13 @@ func reconciliation() map[string][]map[string]float64 {
 			continue
 		}
 		for _, i := range excs.Tickers {
-			if i.Target != pair {
+			var isPaired bool = false
+			for _, pai := range pairs {
+				if i.Target == pai {
+					isPaired = true
+				}
+			}
+			if !isPaired  {
 				continue
 			}
 			if i.Volume < minVolume {
